@@ -6,6 +6,7 @@
 #include"VAO.h"
 #include"VBO.h"
 #include"EBO.h"
+#include<stb/stb_image.h> 
 
 
 GLfloat vertices[] ={
@@ -63,6 +64,8 @@ int main(){
 	VBO1.Unbind();
 	EBO1.Unbind();
 
+	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+
 
 
 
@@ -73,6 +76,7 @@ int main(){
 
 
 		shaderProgram.Activate();
+		glUniform1f(uniID, 0.5f);
 
 		VAO1.Bind();
 
