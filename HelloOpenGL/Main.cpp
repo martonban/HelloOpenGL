@@ -113,8 +113,6 @@ int main() {
 	lightEBO.Unbind();
 
 	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-
-
 	glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
 	glm::mat4 lightModel = glm::mat4(1.0f);
 	lightModel = glm::translate(lightModel, lightPos);
@@ -132,10 +130,10 @@ int main() {
 	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 
 	//Texture
-	Texture wallTexture("planks.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
+	Texture wallTexture("planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
 	wallTexture.texUnit(shaderProgram, "tex0", 0);
-
-
+	Texture planksSpec("planksSpec.png", GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
+	planksSpec.texUnit(shaderProgram, "tex1", 1);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -149,11 +147,14 @@ int main() {
 		camera.Inputs(window);
 		camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
+		shaderProgram.Activate();
+
 		glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);		shaderProgram.Activate();
 		camera.Matrix(shaderProgram, "camMatrix");
 
 
 		wallTexture.Bind();
+		planksSpec.Bind();
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
 
@@ -173,8 +174,12 @@ int main() {
 	VBO1.Delete();
 	EBO1.Delete();
 	wallTexture.Delete();
+	planksSpec.Delete();
 	shaderProgram.Delete();
-
+	lightVAO.Delete();
+	lightVBO.Delete();
+	lightEBO.Delete();
+	lightShader.Delete();
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	return 0;

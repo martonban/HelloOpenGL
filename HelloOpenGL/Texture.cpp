@@ -12,24 +12,17 @@ Texture::Texture(const char* image, GLenum texType, GLuint slot, GLenum format, 
 	unit = slot;
 	glBindTexture(texType, ID);
 
-	glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 
-	if (bytes) {
-		if (format == GL_RGB) {
-			glTexImage2D(texType, 0, GL_RGBA, widthImg, heightImg, 0, GL_RGBA, pixelType, bytes);
-			glGenerateMipmap(texType);
-		}
-		else {
-			glTexImage2D(texType, 0, GL_RGB, widthImg, heightImg, 0, GL_RGB, pixelType, bytes);
-			glGenerateMipmap(texType);
-		}
-	}
-	
+
+
+	glTexImage2D(texType, 0, GL_RGBA, widthImg, heightImg, 0, format, pixelType, bytes);
+	glGenerateMipmap(texType);
 
 	stbi_image_free(bytes);
 	glBindTexture(texType, 0);
@@ -37,9 +30,9 @@ Texture::Texture(const char* image, GLenum texType, GLuint slot, GLenum format, 
 }
 
 void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit) {
-	GLuint tex0Uni = glGetUniformLocation(shader.ID, uniform);
+	GLuint texUni = glGetUniformLocation(shader.ID, uniform);
 	shader.Activate();
-	glUniform1f(tex0Uni, unit);
+	glUniform1f(texUni, unit);
 }
 
 void Texture::Bind() {
