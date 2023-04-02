@@ -5,5 +5,5 @@ I am not finished this project because I started learning the whole thing again 
 
 # Screen Shots
 
-<img href = "img/screen01.png"><br>
-<img href = "img/screen02.png"><br>
+<img src = "img/screen01.png"><br>
+<img src = "img/screen02.png"><br>
